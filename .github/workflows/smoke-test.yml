@@ -1,0 +1,76 @@
+name: Smoke
+
+env:
+  modules-cache-name: node-modules
+  browsers-cache-name: playwright-browsers
+  TEST_ENV: ${{ inputs.server }}
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Run tests with tag e.g. @smoke'
+        required: false
+        default: '@smoke'
+      threads:
+        description: 'Number of threads for parallel run'
+        required: false
+        default: '4'
+jobs:
+  POC:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: ${{ env.modules-cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.modules-cache-name }}-${{ hashFiles('./package-lock.json') }}
+      - name: Cache browser binaries
+        id: cache-browser-binaries
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ env.browsers-cache-name }}-${{ hashFiles('./package-lock.json') }}
+          restore-keys: ${{ env.browsers-cache-name }}-${{ hashFiles('./package-lock.json') }}
+      - name: Install dependencies
+        if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
+        run: npm ci
+      - name: Install playwright
+        if: ${{ steps.cache-browser-binaries.outputs.cache-hit != 'true' }}
+        run: npx playwright install
+
+      - name: Run test
+        env:
+          PARALLEL: ${{ inputs.threads || '4' }}
+          TAGS: ${{ inputs.tags }}
+        run: npm run test
+
+      - name: Junit report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: './report/report.xml'
+          fail_on_failure: true
+
+      - name: Print ReportPortal link
+        if: always()
+        run: |
+          REPORT_LINK_ID=$(curl -s -X GET "https://reportportal.epam.com/api/v1/infl-002/launch?filter.eq.description=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" -H  "accept: */*" -H  "Authorization: bearer ${RP_UUID}" | jq ".content[0].id")
+          echo "### Report link: https://reportportal.epam.com/ui/#infl-002/launches/all/${REPORT_LINK_ID}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Modules cache save
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: ${{ env.modules-cache-name }}-${{ hashFiles('./package-lock.json') }}
+
+      - name: Browsers cache save
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ env.browsers-cache-name }}-${{ hashFiles('./package-lock.json') }}

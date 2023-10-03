@@ -1,0 +1,7 @@
+/report/
+/.vscode/
+/.idea/
+/.DS_Store
+/node_modules/
+/traces/
+.env
