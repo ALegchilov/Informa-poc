@@ -1,6 +1,6 @@
 import Memory from './memory';
 import params from './support/executionParams';
-import {GITHUB_ACTIONS_RUNS_URL, REPORT_PORTAL_DATA} from './support/constants';
+import {GITHUB_ACTIONS_RUNS_URL, RP_ENDPOINT} from './support/constants';
 import Informa from "./page_object";
 
 export default {
@@ -48,7 +48,7 @@ export default {
         rpConfig: {
             enable: params.RP_ENABLE,
             apiKey: process.env.RP_API_KEY,
-            endpoint: REPORT_PORTAL_DATA.ENDPOINT,
+            endpoint: RP_ENDPOINT,
             description: GITHUB_ACTIONS_RUNS_URL + process.env.GITHUB_RUN_ID,
             project: 'infl-002',
             launch: `INFORMA POC on ${params.TEST_BRAND}`,
