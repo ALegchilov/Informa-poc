@@ -47,7 +47,7 @@ export default {
         },
         rpConfig: {
             enable: params.RP_ENABLE,
-            apiKey: '89d84085-6eb4-4ebc-8d5a-48462587fd05',
+            apiKey: process.env.RP_API_KEY,
             endpoint: REPORT_PORTAL_DATA.ENDPOINT,
             description: GITHUB_ACTIONS_RUNS_URL + process.env.GITHUB_RUN_ID,
             project: 'infl-002',
