@@ -1,6 +1,7 @@
 import Account from "../interfaces/Account";
 import SecretVariables from "../support/secretVariables";
 SecretVariables.init();
+console.log('process.env.ACCOUNTS', process.env.ACCOUNTS)
 const accounts: Array<Account> = JSON.parse(process.env.ACCOUNTS as string);
 
 const number = (numberLike: string): number => parseFloat(numberLike);
