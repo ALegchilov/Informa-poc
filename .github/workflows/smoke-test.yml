@@ -4,7 +4,8 @@ env:
   modules-cache-name: node-modules
   browsers-cache-name: playwright-browsers
   TEST_ENV: ${{ inputs.server }}
-  SECRET: ${{secrets.SECRET}}
+  SECRET: ${{ secrets.SECRET }}
+  RP_API_KEY: ${{ secrets.RP_API_KEY }}
 on:
   workflow_dispatch:
     inputs:
