@@ -1,4 +1,4 @@
-@smoke @al
+@smoke
 Feature: Registered user can sign in with proper credentials
 
   Jira [STAN-9739]

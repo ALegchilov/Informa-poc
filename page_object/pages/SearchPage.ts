@@ -7,4 +7,5 @@ export default class SearchPage extends Component {
   SearchResultSummary = $('[data-testid="searchSummaryResults-desktop-text"]');
   Pagination = $('[data-component="pagination"]');
   SearchResultTitles = $$('.ListPreview [data-testid="preview-default-title"]');
+  NoResultsFoundTitle = $('[data-testid="noResultsFoundTitle"]');
 }
