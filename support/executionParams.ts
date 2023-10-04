@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import isCI from 'is-ci';
-
+import SecretVariables from "../support/secretVariables";
+SecretVariables.init();
 dotenv.config();
 
 export default {
@@ -16,4 +17,5 @@ export default {
     TAGS: process.env.TAGS,
     PARALLEL: Number(process.env.PARALLEL) || 1,
     DEBUG_LOGS: process.env.DEBUG_LOGS === 'true',
+    ACCOUNTS: JSON.parse(process.env.ACCOUNTS as string)
 };

@@ -8,9 +8,7 @@ export default class SecretVariables {
     static init(): void {
         if (!process.env.CI && !process.env.SECRET)
             throw new Error('Cannot decrypt encrypted data. Please set password as a value of SECRET environment variable.');
-        if (!process.env.CI) {
-            const decrypted = secureEnv({ inputFile: '.env.enc', secret: process.env.SECRET as string });
-            Object.assign(process.env, decrypted);
-        }
+        const decrypted = secureEnv({inputFile: '.env.enc', secret: process.env.SECRET as string});
+        Object.assign(process.env, decrypted);
     }
 }

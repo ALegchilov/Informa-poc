@@ -1,8 +1,6 @@
 import Account from "../interfaces/Account";
-import SecretVariables from "../support/secretVariables";
-SecretVariables.init();
-console.log('process.env.ACCOUNTS', process.env.ACCOUNTS)
-const accounts: Array<Account> = JSON.parse(process.env.ACCOUNTS as string);
+import params from "./../support/executionParams"
+const accounts: Array<Account> = params.ACCOUNTS;
 
 const number = (numberLike: string): number => parseFloat(numberLike);
 const boolean = (booleanLike: string): boolean => {
